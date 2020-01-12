@@ -13,8 +13,6 @@ import java.util.TreeSet;
 public class Main {
 
 	public static void main(String[] args) {
-		//Set<Hand> hands = new TreeSet<>(new HandComparator());
-		
 		// create six Hands for six players
 		/*final Set<Hand> unsortedHands = new HashSet<>();
 		for(int i = 0; i < 6; i++) {
@@ -66,11 +64,11 @@ public class Main {
 		
 		Set<Card> cards1 = new HashSet<Card>();
 		
-		cards1.add(new Card(Suit.CLUBS, Rank.FIVE));
-		cards1.add(new Card(Suit.CLUBS, Rank.SIX));
-		cards1.add(new Card(Suit.CLUBS, Rank.SEVEN));
-		cards1.add(new Card(Suit.CLUBS, Rank.EIGHT));
-		cards1.add(new Card(Suit.CLUBS, Rank.NINE));
+		cards1.add(new Card(Suit.CLUBS, Rank.TEN));
+		cards1.add(new Card(Suit.CLUBS, Rank.QUEEN));
+		cards1.add(new Card(Suit.CLUBS, Rank.JACK));
+		cards1.add(new Card(Suit.CLUBS, Rank.KING));
+		cards1.add(new Card(Suit.CLUBS, Rank.ACE));
 		
 		hand1.setCards(cards1);
 		

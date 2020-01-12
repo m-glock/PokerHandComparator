@@ -51,15 +51,12 @@ public class HandComparator implements Comparator<Hand> {
 		
 		System.out.println("get hand category.");
 		Set<Card> cards = hand.getCards();
+		for (Card card : cards) {
+			System.out.println(card.getRank() + " of " + card.getSuit());
+		}
 		
 		//check how many cards of the same rank are in the hand
 		Map<Rank, Long> rankCounts = cards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
-
-		//for testing
-		for(Entry<Rank, Long> rankCountEntry : rankCounts.entrySet()) {
-			System.out.println("value " + rankCountEntry.getValue());
-			
-		}
 		
 		if (rankCounts.containsValue(4L)) {
 			System.out.println("four of a kind");
@@ -94,7 +91,11 @@ public class HandComparator implements Comparator<Hand> {
 				
 		// check for straights
 		boolean isStraight = false;
-		if((cardList.get(cardList.size() - 1).getRank().getRankNumber() - cardList.get(0).getRank().getRankNumber()) == 4) isStraight = true; // TODO: special case that ace can be both 1 and 14
+		if((cardList.get(cardList.size() - 1).getRank().getRankNumber() - cardList.get(0).getRank().getRankNumber()) == 4) isStraight = true; 
+		// TODO: special case ace
+		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING) && (cardList.get(cardList.size()-1).getRank().getRankNumber() - cardList.get(1).getRank().getRankNumber()) == 3) {
+			isStraight = true;
+		}
 	
 		// return straight, flush, straight flush or high card
 		if (isStraight) {
