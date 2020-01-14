@@ -43,7 +43,19 @@ public class HandComparator implements Comparator<Hand> {
 			return 1;
 		} else {
 			System.out.println("cards have the same category");
-			return compareSameCategory(leftHandCategory, left.getCards(), right.getCards());
+			int value = compareSameCategory(leftHandCategory, left.getCards(), right.getCards());
+			if(value < 0) {
+				System.out.println("right Hand has won.");
+				return -1;
+			} else if (value > 0) {
+				System.out.println("left Hand has won.");
+				return 1;
+			} else {
+				System.out.println("both Hands are equal.");
+				return 0;
+			}
+			
+			//return compareSameCategory(leftHandCategory, left.getCards(), right.getCards());
 		}
 	}
 	
@@ -51,9 +63,6 @@ public class HandComparator implements Comparator<Hand> {
 		
 		System.out.println("get hand category.");
 		Set<Card> cards = hand.getCards();
-		for (Card card : cards) {
-			System.out.println(card.getRank() + " of " + card.getSuit());
-		}
 		
 		//check how many cards of the same rank are in the hand
 		Map<Rank, Long> rankCounts = cards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
@@ -120,44 +129,64 @@ public class HandComparator implements Comparator<Hand> {
 			System.out.println("high card");
 			return HandCategory.HIGH_CARD;
 		}
-		
-		//return HandCategory.HIGH_CARD;
 	}
 	
 	private int compareSameCategory(HandCategory category, Set<Card> leftCards, Set<Card> rightCards) {
 		// return -1 if left < right
 		// return 1 if left > right
 		// return 0 if left == right -> special case
+		List<Card> sortedLeftCards = leftCards.stream().sorted(Card.RANK_SUIT_COMPARATOR.reversed()).collect(Collectors.toList());
+		System.out.println("Sorted left cards: ");
+		for(Card card : sortedLeftCards) {
+			System.out.println(card.getRank() + " of " + card.getSuit());
+		}
+		System.out.println();
+		List<Card> sortedRightCards = rightCards.stream().sorted(Card.RANK_SUIT_COMPARATOR.reversed()).collect(Collectors.toList());
+		System.out.println("Sorted right cards: ");
+		for(Card card : sortedRightCards) {
+			System.out.println(card.getRank() + " of " + card.getSuit());
+		}
+		System.out.println();
 		switch(category) {
 			case ROYAL_FLUSH:
 				// compare suits
-				break;
+				System.out.println("Royal Flush");
+				return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case STRAIGHT_FLUSH:
-				// compare highest card
-				// then compare suit
-				break;
+				System.out.println("Straight Flush");
+				int SFValue = sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
+				if(SFValue != 0) return SFValue;
+				else return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case FOUR_OF_A_KIND:
 				// compare rank
 				break;
 			case FULL_HOUSE:
 				// compare rank of three of a kind
+				// then compare rank of pair
+				// them compare suit of three of a kind
+				// then compare suit of pair
 				break;
 			case FLUSH:
+				int FValue = compareRanks(sortedLeftCards, sortedRightCards);
+				if(FValue != 0) return FValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards);
 				// compare rank of highest card
 				// then second highest and so on
-				// if all ranks are same, pot would be split, but we compare suit
-				break;
+				// if all ranks are same, then compare suit of highest card
+				// then second highest etc.
 			case STRAIGHT:
 				// compare rank of highest card
-				// if all ranks are the same, pot would be split, but we compare suit of highest card and so on
+				// if all ranks are the same, compare suit of highest card
+				// then compare suit of second highest card etc.
 				break;
 			case THREE_OF_A_KIND:
 				// compare rank
+				// then compare suit
 				break;
 			case TWO_PAIRS:
 				// compare rank of higher pair
-				// then compare suit of higher pair
 				// then compare rank of lower pair
+				// then compare suit of higher pair
 				// then compare suit of lower pair
 				break;
 			case PAIR:
@@ -165,16 +194,36 @@ public class HandComparator implements Comparator<Hand> {
 				// then compare suit of pair
 				// then compare rank of highest leftover card
 				// then compare suit of highest leftover card
+				// then compare rank of second highest leftover card
 				// and so on
 				break;
 			case HIGH_CARD:
-				// compare rank of highest leftover card
-				// then compare suit of highest leftover card
-				// and so on
-				break;
-			default:
-				break;
+				int HCValue = compareRanks(sortedLeftCards, sortedRightCards);
+				if(HCValue != 0) return HCValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards);
 		}
-		return 1;
+		return 0;
+	}
+	
+	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+		//loop through both lists until two cards do not have the same suit
+		for(int i = 0; i < sortedLeftCards.size(); i++) {
+			int value = sortedLeftCards.get(i).getSuit().compareTo((sortedRightCards.get(i).getSuit()));
+			if(value != 0) return value;
+		}
+
+		// if all ranks are the same, return 0
+		return 0;
+	}
+	
+	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+		//loop through both lists until two cards do not have the same rank
+		for(int i = 0; i < sortedLeftCards.size(); i++) {
+			int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
+			if(value != 0) return value;
+		}
+		
+		// if all ranks are the same, return 0
+		return 0;
 	}
 }

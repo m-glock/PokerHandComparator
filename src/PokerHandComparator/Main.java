@@ -60,20 +60,30 @@ public class Main {
 		
 		comp.compare(hand1, hand2);*/
 		
-		Hand hand1 = new Hand();
+		Hand left = new Hand();
+		Hand right = new Hand();
 		
 		Set<Card> cards1 = new HashSet<Card>();
+		Set<Card> cards2 = new HashSet<Card>();
 		
-		cards1.add(new Card(Suit.CLUBS, Rank.TEN));
-		cards1.add(new Card(Suit.CLUBS, Rank.QUEEN));
-		cards1.add(new Card(Suit.CLUBS, Rank.JACK));
-		cards1.add(new Card(Suit.CLUBS, Rank.KING));
-		cards1.add(new Card(Suit.CLUBS, Rank.ACE));
+		cards1.add(new Card(Suit.DIAMONDS, Rank.FOUR));
+		cards1.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		cards1.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		cards1.add(new Card(Suit.DIAMONDS, Rank.KING));
+		cards1.add(new Card(Suit.DIAMONDS, Rank.NINE));
 		
-		hand1.setCards(cards1);
+		cards2.add(new Card(Suit.CLUBS, Rank.FOUR));
+		cards2.add(new Card(Suit.CLUBS, Rank.QUEEN));
+		cards2.add(new Card(Suit.CLUBS, Rank.FIVE));
+		cards2.add(new Card(Suit.CLUBS, Rank.JACK));
+		cards2.add(new Card(Suit.CLUBS, Rank.NINE));
+		
+		left.setCards(cards1);
+		right.setCards(cards2);
 		
 		HandComparator comp = new HandComparator();
-		comp.getHandCategory(hand1);
+		comp.compare(left, right);
+		//comp.getHandCategory(left);
 		
 	}
 
