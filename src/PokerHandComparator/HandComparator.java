@@ -1,18 +1,17 @@
 package PokerHandComparator;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HandComparator implements Comparator<Hand> {
 
-	static private enum HandCategory{
+	static private enum HandType{
 		HIGH_CARD, PAIR, TWO_PAIRS, THREE_OF_A_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_OF_A_KIND, STRAIGHT_FLUSH, ROYAL_FLUSH;
 	}
 	
@@ -32,18 +31,18 @@ public class HandComparator implements Comparator<Hand> {
 	@Override
 	public int compare(final Hand left, final Hand right) {
 		
-		HandCategory leftHandCategory = getHandCategory(left);
-		HandCategory rightHandCategory = getHandCategory(right);
+		HandType leftHandType = getHandType(left);
+		HandType rightHandType = getHandType(right);
 		
-		if (leftHandCategory.compareTo(rightHandCategory) < 0) {
+		if (leftHandType.compareTo(rightHandType) < 0) {
 			System.out.println("right Hand has won.");
 			return -1;
-		} else if (leftHandCategory.compareTo(rightHandCategory) > 0) {
+		} else if (leftHandType.compareTo(rightHandType) > 0) {
 			System.out.println("left Hand has won.");
 			return 1;
 		} else {
 			System.out.println("cards have the same category");
-			int value = compareSameCategory(leftHandCategory, left.getCards(), right.getCards());
+			int value = compareSameHandType(leftHandType, left.getCards(), right.getCards());
 			if(value < 0) {
 				System.out.println("right Hand has won.");
 				return -1;
@@ -51,15 +50,18 @@ public class HandComparator implements Comparator<Hand> {
 				System.out.println("left Hand has won.");
 				return 1;
 			} else {
-				System.out.println("both Hands are equal.");
+				System.out.println("both Hands are equal. Should not happen");
+				//TODO: throw Error?
 				return 0;
 			}
-			
-			//return compareSameCategory(leftHandCategory, left.getCards(), right.getCards());
 		}
 	}
 	
-	public HandCategory getHandCategory(final Hand hand) {
+	/**
+	 * 
+	 * 
+	 * */
+	public HandType getHandType(final Hand hand) {
 		
 		System.out.println("get hand category.");
 		Set<Card> cards = hand.getCards();
@@ -69,22 +71,22 @@ public class HandComparator implements Comparator<Hand> {
 		
 		if (rankCounts.containsValue(4L)) {
 			System.out.println("four of a kind");
-			return HandCategory.FOUR_OF_A_KIND;
+			return HandType.FOUR_OF_A_KIND;
 		} else if (rankCounts.containsValue(3L)) {
 			if (rankCounts.containsValue(2L)) {
 				System.out.println("full house");
-				return HandCategory.FULL_HOUSE;
+				return HandType.FULL_HOUSE;
 			} else {
 				System.out.println("three of a kind");
-				return HandCategory.THREE_OF_A_KIND;
+				return HandType.THREE_OF_A_KIND;
 			}
 		} else if (rankCounts.containsValue(2L)) {
 			if (Collections.frequency(rankCounts.values(), 2L) > 1) { //if there is more than one rank with a frequency of 2
 				System.out.println("two pairs");
-				return HandCategory.TWO_PAIRS;
+				return HandType.TWO_PAIRS;
 			} else {
 				System.out.println("one pair");
-				return HandCategory.PAIR;
+				return HandType.PAIR;
 			}
 		}
 		
@@ -109,32 +111,35 @@ public class HandComparator implements Comparator<Hand> {
 		// return straight, flush, straight flush or high card
 		if (isStraight) {
 			if (isFlush) {
-				List<Rank> cardRanks = cardList.stream().map(card -> card.getRank()).collect(Collectors.toList());
-				if(cardRanks.contains(Rank.ACE) && cardRanks.contains(Rank.KING)) {
+				if(rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING)) {
 					System.out.println("royal flush");
-					return HandCategory.ROYAL_FLUSH;
+					return HandType.ROYAL_FLUSH;
 				} else {
 					System.out.println("straight flush");
-					return HandCategory.STRAIGHT_FLUSH;
+					return HandType.STRAIGHT_FLUSH;
 				}
 			} else {
 				System.out.println("straight");
-				return HandCategory.STRAIGHT;
+				return HandType.STRAIGHT;
 			}
 		} else if (isFlush) {
 			System.out.println("flush");
-			return HandCategory.FLUSH;
+			return HandType.FLUSH;
 		} else {
 			// now the only thing left is a High Card
 			System.out.println("high card");
-			return HandCategory.HIGH_CARD;
+			return HandType.HIGH_CARD;
 		}
 	}
 	
-	private int compareSameCategory(HandCategory category, Set<Card> leftCards, Set<Card> rightCards) {
+	/**
+	 * 
+	 * 
+	 * */
+	private int compareSameHandType(HandType type, Set<Card> leftCards, Set<Card> rightCards) {
 		// return -1 if left < right
 		// return 1 if left > right
-		// return 0 if left == right -> special case
+		// return 0 if left == right -> should not happen
 		List<Card> sortedLeftCards = leftCards.stream().sorted(Card.RANK_SUIT_COMPARATOR.reversed()).collect(Collectors.toList());
 		System.out.println("Sorted left cards: ");
 		for(Card card : sortedLeftCards) {
@@ -147,83 +152,122 @@ public class HandComparator implements Comparator<Hand> {
 			System.out.println(card.getRank() + " of " + card.getSuit());
 		}
 		System.out.println();
-		switch(category) {
+		
+		int sortedValue = 0;
+		switch(type) {
 			case ROYAL_FLUSH:
-				// compare suits
-				System.out.println("Royal Flush");
-				return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
+				System.out.println("Royal Flush. Suit of one Card is compared.");
+				return compareSuits(sortedLeftCards, sortedRightCards, true);
 			case STRAIGHT_FLUSH:
-				System.out.println("Straight Flush");
-				int SFValue = sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
-				if(SFValue != 0) return SFValue;
-				else return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
-			case FOUR_OF_A_KIND:
-				// compare rank
-				break;
-			case FULL_HOUSE:
-				// compare rank of three of a kind
-				// then compare rank of pair
-				// them compare suit of three of a kind
-				// then compare suit of pair
-				break;
-			case FLUSH:
-				int FValue = compareRanks(sortedLeftCards, sortedRightCards);
-				if(FValue != 0) return FValue;
-				else return compareSuits(sortedLeftCards, sortedRightCards);
-				// compare rank of highest card
-				// then second highest and so on
-				// if all ranks are same, then compare suit of highest card
-				// then second highest etc.
 			case STRAIGHT:
-				// compare rank of highest card
-				// if all ranks are the same, compare suit of highest card
-				// then compare suit of second highest card etc.
-				break;
+			case HIGH_CARD:
+				System.out.println("Straight Flush. Only highest card is compared for rank and suit.");
+				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, true);
+				if(sortedValue != 0) return sortedValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards, true);
+			case FOUR_OF_A_KIND:
+				//return findRankOfCardMultiple(sortedLeftCards, sortedRightCards);
+			case FULL_HOUSE:
 			case THREE_OF_A_KIND:
-				// compare rank
-				// then compare suit
-				break;
+				return findRankOfCardMultiple(sortedLeftCards, sortedRightCards, false);
+			case FLUSH:
+				System.out.println("Flush. Rank of all cards and suit of all cards is compared.");
+				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, false);
+				if(sortedValue != 0) return sortedValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards, false);
+			/*case STRAIGHT:
+				System.out.println("Straight. Highest card is compared for rank and suit.");
+				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, true);
+				if(sortedValue != 0) return sortedValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards, true);
+			case THREE_OF_A_KIND:
+				return findRankOfCardMultiple(sortedLeftCards, sortedRightCards);*/
 			case TWO_PAIRS:
 				// compare rank of higher pair
 				// then compare rank of lower pair
-				// then compare suit of higher pair
-				// then compare suit of lower pair
+				// who has clubs in higher pair?
+				//TODO: return
+				//findRankOfCardMultiple(sortedLeftCards, sortedRightCards, true);
 				break;
 			case PAIR:
-				// compare rank of pair
-				// then compare suit of pair
-				// then compare rank of highest leftover card
-				// then compare suit of highest leftover card
-				// then compare rank of second highest leftover card
-				// and so on
-				break;
-			case HIGH_CARD:
-				int HCValue = compareRanks(sortedLeftCards, sortedRightCards);
-				if(HCValue != 0) return HCValue;
-				else return compareSuits(sortedLeftCards, sortedRightCards);
+				sortedValue = findRankOfCardMultiple(sortedLeftCards, sortedRightCards, false);
+				if(sortedValue != 0 ) return sortedValue;
+				// TODO: who has clubs in pair?
+			/*case HIGH_CARD:
+				System.out.println("High card. First Card is compared on rank and suit.");
+				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, true);
+				if(sortedValue != 0) return sortedValue;
+				else return compareSuits(sortedLeftCards, sortedRightCards, true);*/
 		}
 		return 0;
 	}
 	
-	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
-		//loop through both lists until two cards do not have the same suit
+	/**
+	 * 
+	 * 
+	 * */
+	private int findRankOfCardMultiple(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
+		Map<Rank, Long> rightRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
+		
+		Stream<Entry<Rank, Long>> leftEntryStream = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
+		Stream<Entry<Rank, Long>> rightEntryStream = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
+			
+		if(leftEntryStream.count() > 1) { 
+			if(leftRankCounts.containsValue(3)) { //TODO: full house
+				// sorted?
+			}
+			// two pairs
+			List<Rank> firstLeftRank = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+			List<Rank> firstRightRank = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+			System.out.println("compared same type. First left " + firstLeftRank + " and first right " + firstRightRank);
+			return firstLeftRank.compareTo(firstRightRank);	
+		} else {
+			Rank leftRank = leftEntryStream.findFirst().get().getKey();
+			Rank rightRank = rightEntryStream.findFirst().get().getKey();
+			System.out.println("compared same type. Left " + leftRank + " and right " + rightRank);
+			if(leftEntryStream.count() != 2) return leftRank.compareTo(rightRank);
+
+			//continue for single pair and check for clubs
+			Card leftCard = sortedLeftCards.stream().filter(card -> card.getRank() == leftRank).findFirst().get();
+			return leftCard.getSuit() == Suit.CLUBS ? 1 : -1;
+		}
+		/*for(Entry<Rank, Long> entry : leftRankCounts.entrySet()) {
+			if(entry.getValue() > 1) leftRank = entry.getKey();
+		}
+		for(Entry<Rank, Long> entry : rightRankCounts.entrySet()) {
+			if(entry.getValue() > 1) rightRank = entry.getKey();
+		}*/
+	}
+	
+	/**
+	 * 
+	 * 
+	 * */
+	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards, boolean compareFirstCard) {
+		//TODO: highest card ace?
+		if (compareFirstCard) return sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
+		
+		for(int i = 0; i < sortedLeftCards.size(); i++) {
+			int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
+			if(value != 0) return value;
+		}
+
+		return 0;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * */
+	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards, boolean compareFirstCard) {
+		if (compareFirstCard) return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
+		
 		for(int i = 0; i < sortedLeftCards.size(); i++) {
 			int value = sortedLeftCards.get(i).getSuit().compareTo((sortedRightCards.get(i).getSuit()));
 			if(value != 0) return value;
 		}
 
-		// if all ranks are the same, return 0
-		return 0;
-	}
-	
-	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
-		//loop through both lists until two cards do not have the same rank
-		for(int i = 0; i < sortedLeftCards.size(); i++) {
-			int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
-			if(value != 0) return value;
-		}
-		
-		// if all ranks are the same, return 0
 		return 0;
 	}
 }
