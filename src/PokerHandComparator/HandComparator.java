@@ -53,7 +53,7 @@ public class HandComparator implements Comparator<Hand> {
 				return 1;
 			} else {
 				System.out.println("both Hands are equal. Should not happen. Value " + value);
-				//TODO: throw Error?
+				//TODO: throw Error
 				return 0;
 			}
 		}
@@ -103,7 +103,6 @@ public class HandComparator implements Comparator<Hand> {
 		// check for straights
 		boolean isStraight = false;
 		if((cardList.get(cardList.size() - 1).getRank().getRankNumber() - cardList.get(0).getRank().getRankNumber()) == 4) isStraight = true; 
-		// TODO: special case ace
 		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING) && (cardList.get(cardList.size()-1).getRank().getRankNumber() - cardList.get(1).getRank().getRankNumber()) == 3) {
 			isStraight = true;
 		}
@@ -137,9 +136,6 @@ public class HandComparator implements Comparator<Hand> {
 	 * 
 	 * */
 	private int compareSameHandType(HandType type, Set<Card> leftCards, Set<Card> rightCards) {
-		// return -1 if left < right
-		// return 1 if left > right
-		// return 0 if left == right -> should not happen
 		List<Card> sortedLeftCards = leftCards.stream().sorted(Card.RANK_SUIT_COMPARATOR.reversed()).collect(Collectors.toList());
 		System.out.println("Sorted left cards: ");
 		for(Card card : sortedLeftCards) {
@@ -167,6 +163,7 @@ public class HandComparator implements Comparator<Hand> {
 				else return compareSuits(sortedLeftCards, sortedRightCards, true);
 			case FLUSH:
 				System.out.println("Flush. Rank of all cards and suit of all cards is compared.");
+				//TODO: change all other to oneliners and remove boolean
 				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, false);
 				if(sortedValue != 0) return sortedValue;
 				else return compareSuits(sortedLeftCards, sortedRightCards, false);
@@ -205,6 +202,7 @@ public class HandComparator implements Comparator<Hand> {
 		System.out.println(rightRank);
 			
 		System.out.println("left and right compared: "+ leftRank.compareTo(rightRank));
+		//TODO: highest card ace?
 		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
 		
 		//for one or two pairs
@@ -216,42 +214,8 @@ public class HandComparator implements Comparator<Hand> {
 	 * 
 	 * 
 	 * */
-	/*private int findRankOfCardMultiple(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
-		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
-		Map<Rank, Long> rightRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
-		//TODO: zusammenfassen
-		Stream<Entry<Rank, Long>> leftEntryStream = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
-		Stream<Entry<Rank, Long>> rightEntryStream = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
-			
-		if(leftEntryStream.count() > 1) { // there is more than one multiple in the list (2 pairs or full house)
-			if(leftEntryStream.anyMatch(entry -> entry.getValue() == 3)) { 
-				Rank leftRank = leftEntryStream.filter(entry -> entry.getValue() == 3).findFirst().get().getKey();
-				Rank rightRank = rightEntryStream.filter(entry -> entry.getValue() == 3).findFirst().get().getKey();
-				System.out.println("compared same type. Left " + leftRank + " and right " + rightRank);
-				return leftRank.compareTo(rightRank);
-			}
-			List<Rank> leftRanks = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
-			List<Rank> rightRanks = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
-			int rankValue = leftRanks.get(0).compareTo(rightRanks.get(0));
-			System.out.println("compared same type. higher left " + leftRanks.get(0) + " and higher right " + rightRanks.get(0));
-			if(rankValue != 0) return rankValue;
-			return sortedLeftCards.stream().filter(card -> card.getRank() == leftRanks.get(0)).anyMatch(card -> card.getSuit() == Suit.CLUBS) ? 1 : -1;
-		} else { //there is only one multiple in the list (four of a kind, three of a kind, pair)
-			Rank leftRank = leftEntryStream.findFirst().get().getKey();
-			Rank rightRank = rightEntryStream.findFirst().get().getKey();
-			System.out.println("compared same type. Left " + leftRank + " and right " + rightRank);
-			if(leftEntryStream.noneMatch(entry -> entry.getValue() == 2) || leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
-			//continue for single pair and check for clubs
-			return sortedLeftCards.stream().filter(card -> card.getRank() == leftRank).anyMatch(card -> card.getSuit() == Suit.CLUBS) ? 1 : -1;
-		}
-	}*/
-	
-	/**
-	 * 
-	 * 
-	 * */
 	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards, boolean compareFirstCard) {
-		//TODO: highest card ace?
+		//TODO: highest card ace? case straight (high card?, flush?)
 		if (compareFirstCard) return sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
 		
 		for(int i = 0; i < sortedLeftCards.size(); i++) {
