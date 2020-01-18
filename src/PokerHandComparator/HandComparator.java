@@ -213,31 +213,26 @@ public class HandComparator implements Comparator<Hand> {
 		Stream<Entry<Rank, Long>> leftEntryStream = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
 		Stream<Entry<Rank, Long>> rightEntryStream = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1);
 			
-		if(leftEntryStream.count() > 1) { 
-			if(leftRankCounts.containsValue(3)) { //TODO: full house
-				// sorted?
+		if(leftEntryStream.count() > 1) { // there is more than one multiple in the list (2 pairs or full house)
+			if(leftRankCounts.containsValue(3)) {
+				Rank leftRank = leftEntryStream.filter(entry -> entry.getValue() == 3).findFirst().get().getKey();
+				Rank rightRank = rightEntryStream.filter(entry -> entry.getValue() == 3).findFirst().get().getKey();
+				System.out.println("compared same type. Left " + leftRank + " and right " + rightRank);
+				return leftRank.compareTo(rightRank);
 			}
 			// two pairs
 			List<Rank> firstLeftRank = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
 			List<Rank> firstRightRank = leftEntryStream.map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
 			System.out.println("compared same type. First left " + firstLeftRank + " and first right " + firstRightRank);
 			return firstLeftRank.compareTo(firstRightRank);	
-		} else {
+		} else { //there is only one multiple in the list (four of a kind, three of a kind, pair)
 			Rank leftRank = leftEntryStream.findFirst().get().getKey();
 			Rank rightRank = rightEntryStream.findFirst().get().getKey();
 			System.out.println("compared same type. Left " + leftRank + " and right " + rightRank);
-			if(leftEntryStream.count() != 2) return leftRank.compareTo(rightRank);
-
+			if(leftEntryStream.noneMatch(entry -> entry.getValue() == 2) || leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
 			//continue for single pair and check for clubs
-			Card leftCard = sortedLeftCards.stream().filter(card -> card.getRank() == leftRank).findFirst().get();
-			return leftCard.getSuit() == Suit.CLUBS ? 1 : -1;
+			return sortedLeftCards.stream().filter(card -> card.getRank() == leftRank).anyMatch(card -> card.getSuit() == Suit.CLUBS) ? 1 : -1;
 		}
-		/*for(Entry<Rank, Long> entry : leftRankCounts.entrySet()) {
-			if(entry.getValue() > 1) leftRank = entry.getKey();
-		}
-		for(Entry<Rank, Long> entry : rightRankCounts.entrySet()) {
-			if(entry.getValue() > 1) rightRank = entry.getKey();
-		}*/
 	}
 	
 	/**
