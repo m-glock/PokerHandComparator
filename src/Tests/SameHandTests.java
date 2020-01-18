@@ -1,4 +1,4 @@
-package PokerHandComparator;
+package Tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +12,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import PokerHandComparator.Card;
+import PokerHandComparator.Hand;
+import PokerHandComparator.HandComparator;
+import PokerHandComparator.Rank;
+import PokerHandComparator.Suit;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class SameHandTests {
