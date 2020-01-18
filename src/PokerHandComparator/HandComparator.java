@@ -186,24 +186,25 @@ public class HandComparator implements Comparator<Hand> {
 		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 		Map<Rank, Long> rightRankCounts = sortedRightCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 
-		List<Rank> leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
-		List<Rank> rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
-		
-		System.out.println("Multiples left: ");
-		for(Rank rank : leftPairs) {
-			System.out.println(rank);
+		List<Rank> leftPairs;
+		List<Rank> rightPairs;
+				
+		if(leftRankCounts.containsValue(2L) && leftRankCounts.containsValue(3L)) { // full house
+			System.out.println("full house checked for mutliples");
+			leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() == 3).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+			rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() == 3).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+		} else {
+			System.out.println("other multiples checked.");
+			leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+			rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
 		}
-		System.out.println();
-		for(Rank rank : rightPairs) {
-			System.out.println(rank);
-		}
-		System.out.println();
 		
 		Rank leftRank = leftPairs.get(0);
 		System.out.println(leftRank);
 		Rank rightRank = rightPairs.get(0);
 		System.out.println(rightRank);
 			
+		System.out.println("left and right compared: "+ leftRank.compareTo(rightRank));
 		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
 		
 		//for one or two pairs

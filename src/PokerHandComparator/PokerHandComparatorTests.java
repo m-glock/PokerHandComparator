@@ -50,7 +50,7 @@ class PokerHandComparatorTests {
 	/**
 	 * compare same hand types
 	 * */
-	/*@Test
+	@Test
 	void compareTwoRoyalFlushes() {
 		Suit suitLeft = Suit.DIAMONDS;
 		Suit suitRight = Suit.CLUBS;
@@ -168,7 +168,7 @@ class PokerHandComparatorTests {
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
 		assertEquals(-1, result);
-	}*/
+	}
 	
 	@Test
 	void compareTwoFullHousesSamePair() {
@@ -189,7 +189,7 @@ class PokerHandComparatorTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		assertEquals(1, result);
 	}
 	
 	/*@Test
