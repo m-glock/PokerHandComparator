@@ -397,12 +397,51 @@ class PokerHandComparatorTests {
 		assertEquals(1, result);
 	}
 	
-	/*@Test
+	@Test
 	void compareTwoPairs() {
-		fail("Not yet implemented");
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.KING));
+		leftCards.add(new Card(Suit.SPADES, Rank.KING));
+		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.SIX));
+		
+		rightCards.add(new Card(Suit.CLUBS, Rank.QUEEN));
+		rightCards.add(new Card(Suit.SPADES, Rank.QUEEN));
+		rightCards.add(new Card(Suit.SPADES, Rank.SEVEN));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
+		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(1, result);
 	}
 	
 	@Test
+	void compareTwoPairsSame() {
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.KING));
+		leftCards.add(new Card(Suit.SPADES, Rank.KING));
+		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
+		leftCards.add(new Card(Suit.CLUBS, Rank.FIVE));
+		leftCards.add(new Card(Suit.CLUBS, Rank.SIX));
+		
+		rightCards.add(new Card(Suit.CLUBS, Rank.KING));
+		rightCards.add(new Card(Suit.HEARTS, Rank.KING));
+		rightCards.add(new Card(Suit.SPADES, Rank.EIGHT));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		rightCards.add(new Card(Suit.SPADES, Rank.SIX));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(-1, result);
+	}
+	
+	/*@Test
 	void compareTwoHighCards() {
 		fail("Not yet implemented");
 	}*/
