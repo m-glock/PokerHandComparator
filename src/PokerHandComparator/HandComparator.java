@@ -1,5 +1,6 @@
 package PokerHandComparator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -169,23 +170,49 @@ public class HandComparator implements Comparator<Hand> {
 				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, false);
 				if(sortedValue != 0) return sortedValue;
 				else return compareSuits(sortedLeftCards, sortedRightCards, false);
+			case FOUR_OF_A_KIND:
+			case THREE_OF_A_KIND:
+			case FULL_HOUSE:
 			case TWO_PAIRS:
 			case PAIR:
-			case FOUR_OF_A_KIND:
-			case FULL_HOUSE:
-			case THREE_OF_A_KIND:
 				System.out.println(type + ". Ranks of mutliples are compared.");
-				return findRankOfCardMultiple(sortedLeftCards, sortedRightCards);
+				return compareMultiples(sortedLeftCards, sortedRightCards);
 			default:
 				return 0;
 		}
+	}
+	
+	private int compareMultiples(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
+		Map<Rank, Long> rightRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
+
+		List<Rank> leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+		List<Rank> rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+		
+		System.out.println("Multiples left: ");
+		for(Rank rank : leftPairs) {
+			System.out.println(rank);
+		}
+		System.out.println();
+		for(Rank rank : rightPairs) {
+			System.out.println(rank);
+		}
+		
+		Rank leftRank = leftPairs.get(0);
+		Rank rightRank = rightPairs.get(0);
+			
+		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
+		
+		//for one or two pairs
+		boolean leftHasClubs = sortedLeftCards.stream().filter(card -> card.getRank() == leftPairs.get(0)).anyMatch(card -> card.getSuit() == Suit.CLUBS);
+		return leftHasClubs ? 1 : -1;
 	}
 	
 	/**
 	 * 
 	 * 
 	 * */
-	private int findRankOfCardMultiple(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+	/*private int findRankOfCardMultiple(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
 		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 		Map<Rank, Long> rightRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 		//TODO: zusammenfassen
@@ -213,7 +240,7 @@ public class HandComparator implements Comparator<Hand> {
 			//continue for single pair and check for clubs
 			return sortedLeftCards.stream().filter(card -> card.getRank() == leftRank).anyMatch(card -> card.getSuit() == Suit.CLUBS) ? 1 : -1;
 		}
-	}
+	}*/
 	
 	/**
 	 * 
