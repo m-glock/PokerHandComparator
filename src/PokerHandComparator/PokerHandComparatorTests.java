@@ -242,12 +242,51 @@ class PokerHandComparatorTests {
 		assertEquals(1, result);
 	}
 	
-	/*@Test
-	void compareTwoStraights() {
-		fail("Not yet implemented");
+	@Test
+	void compareTwoStraightsSame() {
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
+		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FOUR));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.THREE));
+		
+		rightCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.SIX));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
+		rightCards.add(new Card(Suit.HEARTS, Rank.THREE));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(-1, result);
 	}
 	
 	@Test
+	void compareTwoStraightsDiff() {
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
+		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FOUR));
+		
+		rightCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.SIX));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
+		rightCards.add(new Card(Suit.HEARTS, Rank.THREE));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(1, result);
+	}
+	
+	/*@Test
 	void compareTwoThreeKinds() {
 		fail("Not yet implemented");
 	}
