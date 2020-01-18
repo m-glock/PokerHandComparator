@@ -50,7 +50,7 @@ class PokerHandComparatorTests {
 	/**
 	 * compare same hand types
 	 * */
-	@Test
+	/*@Test
 	void compareTwoRoyalFlushes() {
 		Suit suitLeft = Suit.DIAMONDS;
 		Suit suitRight = Suit.CLUBS;
@@ -148,12 +148,51 @@ class PokerHandComparatorTests {
 		assertEquals(1, result);
 	}
 	
-	/*@Test
-	void compareTwoFullHouses() {
-		fail("Not yet implemented");
-	}
+	@Test
+	void compareTwoFullHousesDiffPair() {
+		leftCards.add(new Card(Suit.CLUBS, Rank.FOUR));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FOUR));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.FOUR));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.ACE));
+		leftCards.add(new Card(Suit.SPADES, Rank.ACE));
+		
+		rightCards.add(new Card(Suit.CLUBS, Rank.NINE));
+		rightCards.add(new Card(Suit.HEARTS, Rank.NINE));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.NINE));
+		rightCards.add(new Card(Suit.SPADES, Rank.QUEEN));
+		rightCards.add(new Card(Suit.HEARTS, Rank.QUEEN));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(-1, result);
+	}*/
 	
 	@Test
+	void compareTwoFullHousesSamePair() {
+		leftCards.add(new Card(Suit.CLUBS, Rank.NINE));
+		leftCards.add(new Card(Suit.HEARTS, Rank.NINE));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.NINE));
+		leftCards.add(new Card(Suit.SPADES, Rank.QUEEN));
+		leftCards.add(new Card(Suit.HEARTS, Rank.QUEEN));
+		
+		rightCards.add(new Card(Suit.CLUBS, Rank.FOUR));
+		rightCards.add(new Card(Suit.HEARTS, Rank.FOUR));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.FOUR));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+		rightCards.add(new Card(Suit.CLUBS, Rank.QUEEN));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(-1, result);
+	}
+	
+	/*@Test
 	void compareTwoFlushes() {
 		fail("Not yet implemented");
 	}

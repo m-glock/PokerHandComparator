@@ -184,7 +184,7 @@ public class HandComparator implements Comparator<Hand> {
 	
 	private int compareMultiples(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
 		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
-		Map<Rank, Long> rightRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
+		Map<Rank, Long> rightRankCounts = sortedRightCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 
 		List<Rank> leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
 		List<Rank> rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
@@ -197,9 +197,12 @@ public class HandComparator implements Comparator<Hand> {
 		for(Rank rank : rightPairs) {
 			System.out.println(rank);
 		}
+		System.out.println();
 		
 		Rank leftRank = leftPairs.get(0);
+		System.out.println(leftRank);
 		Rank rightRank = rightPairs.get(0);
+		System.out.println(rightRank);
 			
 		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
 		
