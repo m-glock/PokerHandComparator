@@ -35,22 +35,23 @@ public class HandComparator implements Comparator<Hand> {
 		HandType rightHandType = getHandType(right);
 		
 		if (leftHandType.compareTo(rightHandType) < 0) {
-			System.out.println("right Hand has won.");
+			System.out.println("right Hand has won. Value " + leftHandType.compareTo(rightHandType));
 			return -1;
 		} else if (leftHandType.compareTo(rightHandType) > 0) {
-			System.out.println("left Hand has won.");
+			System.out.println("left Hand has won. Value " + leftHandType.compareTo(rightHandType));
 			return 1;
 		} else {
-			System.out.println("cards have the same category");
+			System.out.println("cards have the same category. Value " + leftHandType.compareTo(rightHandType));
 			int value = compareSameHandType(leftHandType, left.getCards(), right.getCards());
+			System.out.println("value after comparing the same category: " + value);
 			if(value < 0) {
-				System.out.println("right Hand has won.");
+				System.out.println("right Hand has won. Value " + value);
 				return -1;
 			} else if (value > 0) {
-				System.out.println("left Hand has won.");
+				System.out.println("left Hand has won. Value " + value);
 				return 1;
 			} else {
-				System.out.println("both Hands are equal. Should not happen");
+				System.out.println("both Hands are equal. Should not happen. Value " + value);
 				//TODO: throw Error?
 				return 0;
 			}
@@ -62,8 +63,6 @@ public class HandComparator implements Comparator<Hand> {
 	 * 
 	 * */
 	public HandType getHandType(final Hand hand) {
-		
-		System.out.println("get hand category.");
 		Set<Card> cards = hand.getCards();
 		
 		//check how many cards of the same rank are in the hand
@@ -177,8 +176,9 @@ public class HandComparator implements Comparator<Hand> {
 			case THREE_OF_A_KIND:
 				System.out.println(type + ". Ranks of mutliples are compared.");
 				return findRankOfCardMultiple(sortedLeftCards, sortedRightCards);
+			default:
+				return 0;
 		}
-		return 0;
 	}
 	
 	/**
