@@ -4,17 +4,15 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// create six Hands for six players
-		/*final Set<Hand> unsortedHands = new HashSet<>();
+		final Set<Hand> unsortedHands = new HashSet<>();
 		for(int i = 0; i < 6; i++) {
 			unsortedHands.add(new Hand());
 		}
@@ -58,33 +56,6 @@ public class Main {
 		}
 		System.out.println();
 		
-		comp.compare(hand1, hand2);*/
-		
-		Hand left = new Hand();
-		Hand right = new Hand();
-		
-		Set<Card> cards1 = new HashSet<Card>();
-		Set<Card> cards2 = new HashSet<Card>();
-		
-		cards1.add(new Card(Suit.DIAMONDS, Rank.FOUR));
-		cards1.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
-		cards1.add(new Card(Suit.DIAMONDS, Rank.FIVE));
-		cards1.add(new Card(Suit.DIAMONDS, Rank.KING));
-		cards1.add(new Card(Suit.DIAMONDS, Rank.NINE));
-		
-		cards2.add(new Card(Suit.CLUBS, Rank.FOUR));
-		cards2.add(new Card(Suit.CLUBS, Rank.QUEEN));
-		cards2.add(new Card(Suit.CLUBS, Rank.FIVE));
-		cards2.add(new Card(Suit.CLUBS, Rank.JACK));
-		cards2.add(new Card(Suit.CLUBS, Rank.NINE));
-		
-		left.setCards(cards1);
-		right.setCards(cards2);
-		
-		HandComparator comp = new HandComparator();
-		comp.compare(left, right);
-		//comp.getHandCategory(left);
-		
+		comp.compare(hand1, hand2);
 	}
-
 }
