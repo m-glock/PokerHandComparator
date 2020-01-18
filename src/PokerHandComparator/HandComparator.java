@@ -191,10 +191,11 @@ public class HandComparator implements Comparator<Hand> {
 			rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() == 3).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
 		} else {
 			System.out.println("other multiples checked.");
-			leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
-			rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted().collect(Collectors.toList());
+			leftPairs = leftRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+			rightPairs = rightRankCounts.entrySet().stream().filter(entry -> entry.getValue() > 1).map(entry -> entry.getKey()).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 		}
-		
+
+		System.out.println();
 		Rank leftRank = leftPairs.get(0);
 		System.out.println(leftRank);
 		Rank rightRank = rightPairs.get(0);
