@@ -153,20 +153,19 @@ public class HandComparator implements Comparator<Hand> {
 		switch(type) {
 			case ROYAL_FLUSH:
 				System.out.println("Royal Flush. Suit of one Card is compared.");
-				return compareSuits(sortedLeftCards, sortedRightCards, true);
+				return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case STRAIGHT_FLUSH:
 			case STRAIGHT:
 			case HIGH_CARD:
 				System.out.println(type + ". Only highest card is compared for rank and suit.");
-				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, true);
+				sortedValue = sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
 				if(sortedValue != 0) return sortedValue;
-				else return compareSuits(sortedLeftCards, sortedRightCards, true);
+				else return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case FLUSH:
 				System.out.println("Flush. Rank of all cards and suit of all cards is compared.");
-				//TODO: change all other to oneliners and remove boolean
-				sortedValue = compareRanks(sortedLeftCards, sortedRightCards, false);
+				sortedValue = compareRanks(sortedLeftCards, sortedRightCards);
 				if(sortedValue != 0) return sortedValue;
-				else return compareSuits(sortedLeftCards, sortedRightCards, false);
+				else return compareSuits(sortedLeftCards, sortedRightCards);
 			case FOUR_OF_A_KIND:
 			case THREE_OF_A_KIND:
 			case FULL_HOUSE:
@@ -214,15 +213,12 @@ public class HandComparator implements Comparator<Hand> {
 	 * 
 	 * 
 	 * */
-	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards, boolean compareFirstCard) {
+	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
 		//TODO: highest card ace? case straight (high card?, flush?)
-		if (compareFirstCard) return sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
-		
 		for(int i = 0; i < sortedLeftCards.size(); i++) {
 			int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
 			if(value != 0) return value;
 		}
-
 		return 0;
 	}
 	
@@ -230,9 +226,7 @@ public class HandComparator implements Comparator<Hand> {
 	 * 
 	 * 
 	 * */
-	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards, boolean compareFirstCard) {
-		if (compareFirstCard) return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
-		
+	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
 		for(int i = 0; i < sortedLeftCards.size(); i++) {
 			int value = sortedLeftCards.get(i).getSuit().compareTo((sortedRightCards.get(i).getSuit()));
 			if(value != 0) return value;
