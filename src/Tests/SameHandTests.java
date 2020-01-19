@@ -49,7 +49,7 @@ class SameHandTests {
 	/**
 	 * compare same hand types
 	 * */
-	/*@Test
+	@Test
 	void compareTwoRoyalFlushes() {
 		Suit suitLeft = Suit.DIAMONDS;
 		Suit suitRight = Suit.CLUBS;
@@ -306,7 +306,7 @@ class SameHandTests {
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
 		assertEquals(1, result);
-	}*/
+	}
 	
 	@Test
 	void compareTwoStraightsWithAceHighest() {
@@ -330,7 +330,7 @@ class SameHandTests {
 		assertEquals(1, result);
 	}
 	
-	/*@Test
+	@Test
 	void compareTwoThreeKinds() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
 		leftCards.add(new Card(Suit.SPADES, Rank.EIGHT));
@@ -504,7 +504,7 @@ class SameHandTests {
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
 		assertEquals(-1, result);
-	}*/
+	}
 	
 	@Test
 	void errorForSameHand() {
