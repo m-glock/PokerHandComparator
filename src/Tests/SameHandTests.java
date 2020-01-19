@@ -505,6 +505,29 @@ class SameHandTests {
 		System.out.println("result1 in test: " + result);
 		assertEquals(-1, result);
 	}*/
+	
+	@Test
+	void errorForSameHand() {
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
+		leftCards.add(new Card(Suit.SPADES, Rank.TEN));
+		leftCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
+		leftCards.add(new Card(Suit.CLUBS, Rank.FIVE));
+		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
+		
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
+		rightCards.add(new Card(Suit.SPADES, Rank.TEN));
+		rightCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
+		rightCards.add(new Card(Suit.CLUBS, Rank.FIVE));
+		rightCards.add(new Card(Suit.SPADES, Rank.SIX));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		//TODO: change as soon as HandComparator thrwos Exception
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(0, result);
+	}
 }
 
 

@@ -73,7 +73,24 @@ class DifferentHandTests {
 	
 	@Test
 	void royalFlushVsStraighFlush() {
-		fail("Not yet implemented");
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		leftCards.add(new Card(Suit.SPADES, Rank.FIVE));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.FOUR));
+		leftCards.add(new Card(Suit.CLUBS, Rank.FOUR));
+		leftCards.add(new Card(Suit.HEARTS, Rank.ACE));
+		
+		rightCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
+		rightCards.add(new Card(Suit.SPADES, Rank.ACE));
+		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.TEN));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(1, result);
 	}
 	
 	@Test
