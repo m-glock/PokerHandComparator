@@ -50,7 +50,6 @@ public class HandComparator implements Comparator<Hand> {
 				return 1;
 			} else {
 				System.out.println("both Hands are equal. Should not happen. Value " + value);
-				//TODO: throw Error
 				return 0;
 			}
 		}
@@ -160,9 +159,23 @@ public class HandComparator implements Comparator<Hand> {
 				else return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case FLUSH:
 				System.out.println("Flush. Rank of all cards and suit of all cards is compared.");
-				sortedValue = compareRanks(sortedLeftCards, sortedRightCards);
+				//TODO: highest card ace? case straight (high card?, flush?)
+				for(int i = 0; i < sortedLeftCards.size(); i++) {
+					int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
+					if(value != 0) {
+						sortedValue = value;
+						break;
+					}
+				}
 				if(sortedValue != 0) return sortedValue;
-				else return compareSuits(sortedLeftCards, sortedRightCards);
+				for(int i = 0; i < sortedLeftCards.size(); i++) {
+					int value = sortedLeftCards.get(i).getSuit().compareTo((sortedRightCards.get(i).getSuit()));
+					if(value != 0) {
+						sortedValue = value;
+						break;
+					}
+				}
+				return sortedValue;
 			case FOUR_OF_A_KIND:
 			case THREE_OF_A_KIND:
 			case FULL_HOUSE:
@@ -198,38 +211,13 @@ public class HandComparator implements Comparator<Hand> {
 		Rank rightRank = rightPairs.get(0);
 		System.out.println(rightRank);
 			
-		System.out.println("left and right compared: "+ leftRank.compareTo(rightRank));
 		//TODO: highest card ace?
+		
+		System.out.println("left and right compared: "+ leftRank.compareTo(rightRank));
 		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
 		
 		//for one or two pairs
 		boolean leftHasClubs = sortedLeftCards.stream().filter(card -> card.getRank() == leftPairs.get(0)).anyMatch(card -> card.getSuit() == Suit.CLUBS);
 		return leftHasClubs ? 1 : -1;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * */
-	private int compareRanks(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
-		//TODO: highest card ace? case straight (high card?, flush?)
-		for(int i = 0; i < sortedLeftCards.size(); i++) {
-			int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
-			if(value != 0) return value;
-		}
-		return 0;
-	}
-	
-	/**
-	 * 
-	 * 
-	 * */
-	private int compareSuits(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
-		for(int i = 0; i < sortedLeftCards.size(); i++) {
-			int value = sortedLeftCards.get(i).getSuit().compareTo((sortedRightCards.get(i).getSuit()));
-			if(value != 0) return value;
-		}
-
-		return 0;
 	}
 }

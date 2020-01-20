@@ -507,7 +507,7 @@ class SameHandTests {
 	}
 	
 	@Test
-	void errorForSameHand() {
+	void zeroForSameHand() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
 		leftCards.add(new Card(Suit.SPADES, Rank.TEN));
 		leftCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
@@ -522,8 +522,7 @@ class SameHandTests {
 		
 		left.setCards(leftCards);
 		right.setCards(rightCards);
-		
-		//TODO: change as soon as HandComparator thrwos Exception
+
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
 		assertEquals(0, result);
