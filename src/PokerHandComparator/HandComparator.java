@@ -98,8 +98,8 @@ public class HandComparator implements Comparator<Hand> {
 				
 		// check for straights
 		boolean isStraight = false;
-		if((cardList.get(cardList.size() - 1).getRank().getRankNumber() - cardList.get(0).getRank().getRankNumber()) == 4) isStraight = true; 
-		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING) && (cardList.get(cardList.size()-1).getRank().getRankNumber() - cardList.get(1).getRank().getRankNumber()) == 3) {
+		if((cardList.get(cardList.size() - 1).getRank().ordinal() - cardList.get(0).getRank().ordinal()) == 4) isStraight = true; 
+		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING) && (cardList.get(cardList.size()-1).getRank().ordinal() - cardList.get(1).getRank().ordinal()) == 3) {
 			isStraight = true;
 		}
 	
