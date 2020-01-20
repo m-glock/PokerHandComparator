@@ -125,6 +125,31 @@ class SameHandTests {
 	}
 	
 	@Test
+	void compareTwoStraightFlushesWithLowAce() {
+		Suit suitLeft = Suit.SPADES;
+		Suit suitRight = Suit.CLUBS;
+
+		leftCards.add(new Card(suitLeft, Rank.ACE));
+		leftCards.add(new Card(suitLeft, Rank.TWO));
+		leftCards.add(new Card(suitLeft, Rank.THREE));
+		leftCards.add(new Card(suitLeft, Rank.FOUR));
+		leftCards.add(new Card(suitLeft, Rank.FIVE));
+		
+		rightCards.add(new Card(suitRight, Rank.TWO));
+		rightCards.add(new Card(suitRight, Rank.THREE));
+		rightCards.add(new Card(suitRight, Rank.FOUR));
+		rightCards.add(new Card(suitRight, Rank.FIVE));
+		rightCards.add(new Card(suitRight, Rank.SIX));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(-1, result);
+	}
+	
+	@Test
 	void compareTwoFourKinds() {
 		
 		leftCards.add(new Card(Suit.CLUBS, Rank.NINE));
@@ -265,6 +290,31 @@ class SameHandTests {
 	}
 	
 	@Test
+	void compareTwoFlushesAceHigh() {
+		Suit leftSuit = Suit.DIAMONDS;
+		Suit rightSuit = Suit.HEARTS;
+		
+		leftCards.add(new Card(leftSuit, Rank.ACE));
+		leftCards.add(new Card(leftSuit, Rank.KING));
+		leftCards.add(new Card(leftSuit, Rank.NINE));
+		leftCards.add(new Card(leftSuit, Rank.FOUR));
+		leftCards.add(new Card(leftSuit, Rank.FIVE));
+		
+		rightCards.add(new Card(rightSuit, Rank.KING));
+		rightCards.add(new Card(rightSuit, Rank.THREE));
+		rightCards.add(new Card(rightSuit, Rank.NINE));
+		rightCards.add(new Card(rightSuit, Rank.FOUR));
+		rightCards.add(new Card(rightSuit, Rank.FIVE));
+		
+		left.setCards(leftCards);
+		right.setCards(rightCards);
+		
+		int result = comp.compare(left, right);
+		System.out.println("result1 in test: " + result);
+		assertEquals(1, result);
+	}
+	
+	@Test
 	void compareTwoStraightsSame() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
@@ -309,18 +359,18 @@ class SameHandTests {
 	}
 	
 	@Test
-	void compareTwoStraightsWithAceHighest() {
-		leftCards.add(new Card(Suit.DIAMONDS, Rank.TEN));
-		leftCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
-		leftCards.add(new Card(Suit.SPADES, Rank.QUEEN));
-		leftCards.add(new Card(Suit.HEARTS, Rank.KING));
-		leftCards.add(new Card(Suit.DIAMONDS, Rank.ACE));
+	void compareTwoStraightsWithLowAce() {
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
+		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
+		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
+		leftCards.add(new Card(Suit.HEARTS, Rank.FOUR));
 		
-		rightCards.add(new Card(Suit.CLUBS, Rank.KING));
-		rightCards.add(new Card(Suit.DIAMONDS, Rank.QUEEN));
-		rightCards.add(new Card(Suit.HEARTS, Rank.JACK));
-		rightCards.add(new Card(Suit.SPADES, Rank.TEN));
-		rightCards.add(new Card(Suit.HEARTS, Rank.NINE));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
+		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
+		rightCards.add(new Card(Suit.HEARTS, Rank.THREE));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.TWO));
+		rightCards.add(new Card(Suit.HEARTS, Rank.ACE));
 		
 		left.setCards(leftCards);
 		right.setCards(rightCards);
@@ -338,9 +388,9 @@ class SameHandTests {
 		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		
-		rightCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
-		rightCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
-		rightCards.add(new Card(Suit.SPADES, Rank.SEVEN));
+		rightCards.add(new Card(Suit.HEARTS, Rank.ACE));
+		rightCards.add(new Card(Suit.DIAMONDS, Rank.ACE));
+		rightCards.add(new Card(Suit.SPADES, Rank.ACE));
 		rightCards.add(new Card(Suit.SPADES, Rank.FOUR));
 		rightCards.add(new Card(Suit.HEARTS, Rank.THREE));
 		
@@ -349,7 +399,7 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		assertEquals(-1, result);
 	}
 	
 	@Test
@@ -528,5 +578,3 @@ class SameHandTests {
 		assertEquals(0, result);
 	}
 }
-
-

@@ -99,7 +99,7 @@ public class HandComparator implements Comparator<Hand> {
 		// check for straights
 		boolean isStraight = false;
 		if((cardList.get(cardList.size() - 1).getRank().ordinal() - cardList.get(0).getRank().ordinal()) == 4) isStraight = true; 
-		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.KING) && (cardList.get(cardList.size()-1).getRank().ordinal() - cardList.get(1).getRank().ordinal()) == 3) {
+		else if (rankCounts.containsKey(Rank.ACE) && rankCounts.containsKey(Rank.TWO) && ((cardList.get(cardList.size()-2).getRank().ordinal()+2) - (cardList.get(0).getRank().ordinal()+2)) == 3) {
 			isStraight = true;
 		}
 	
@@ -154,12 +154,13 @@ public class HandComparator implements Comparator<Hand> {
 			case STRAIGHT:
 			case HIGH_CARD:
 				System.out.println(type + ". Only highest card is compared for rank and suit.");
-				sortedValue = sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
+				if(type == HandType.STRAIGHT || type == HandType.STRAIGHT_FLUSH) sortedValue = compareHighestCardNotAce(sortedLeftCards, sortedRightCards);
+				else sortedValue = sortedLeftCards.get(0).getRank().compareTo((sortedRightCards.get(0).getRank()));
+				
 				if(sortedValue != 0) return sortedValue;
 				else return sortedLeftCards.get(0).getSuit().compareTo((sortedRightCards.get(0).getSuit()));
 			case FLUSH:
 				System.out.println("Flush. Rank of all cards and suit of all cards is compared.");
-				//TODO: highest card ace? case straight (high card?, flush?)
 				for(int i = 0; i < sortedLeftCards.size(); i++) {
 					int value = sortedLeftCards.get(i).getRank().compareTo((sortedRightCards.get(i).getRank()));
 					if(value != 0) {
@@ -188,6 +189,26 @@ public class HandComparator implements Comparator<Hand> {
 		}
 	}
 	
+	private int compareHighestCardNotAce(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
+		Rank leftRank = null;
+		Rank rightRank = null;
+		for(Card card : sortedLeftCards) {
+			if(card.getRank()!= Rank.ACE) {
+				leftRank = card.getRank();
+				break;
+			}
+		}
+		for(Card card : sortedRightCards) {
+			if(card.getRank()!= Rank.ACE) {
+				rightRank = card.getRank();
+				break;
+			}
+		}
+		System.out.println(leftRank + " and "+ rightRank);
+		if(leftRank == null || rightRank == null) return 0;
+		else return leftRank.compareTo(rightRank);
+	}
+	
 	private int compareMultiples(List<Card> sortedLeftCards, List<Card> sortedRightCards) {
 		Map<Rank, Long> leftRankCounts = sortedLeftCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
 		Map<Rank, Long> rightRankCounts = sortedRightCards.stream().collect(Collectors.groupingBy((Card card) -> card.getRank(), Collectors.counting()));
@@ -210,8 +231,6 @@ public class HandComparator implements Comparator<Hand> {
 		System.out.println(leftRank);
 		Rank rightRank = rightPairs.get(0);
 		System.out.println(rightRank);
-			
-		//TODO: highest card ace?
 		
 		System.out.println("left and right compared: "+ leftRank.compareTo(rightRank));
 		if(leftRank.compareTo(rightRank) != 0) return leftRank.compareTo(rightRank);
