@@ -1,24 +1,15 @@
 package Tests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
-import PokerHandComparator.Card;
-import PokerHandComparator.Hand;
-import PokerHandComparator.HandComparator;
-import PokerHandComparator.Rank;
-import PokerHandComparator.Suit;
+import PokerHandComparator.*;
 
-@TestInstance(Lifecycle.PER_CLASS)
-class SameHandTests {
+public class SameHandTests {
 	
 	private Hand left;
 	private Hand right;
@@ -26,8 +17,7 @@ class SameHandTests {
 	private Set<Card> rightCards;
 	private HandComparator comp;
 	
-	@BeforeAll
-    public void init() {
+    public SameHandTests() {
 		left = new Hand();
 		right = new Hand();
 		
@@ -37,7 +27,7 @@ class SameHandTests {
 		comp = new HandComparator();
     }
 	
-	@AfterEach
+	@After
 	public void prepare() {
 		left.setCards(null);
 		right.setCards(null);
@@ -50,7 +40,7 @@ class SameHandTests {
 	 * compare same hand types
 	 * */
 	@Test
-	void compareTwoRoyalFlushes() {
+	public void compareTwoRoyalFlushes() {
 		Suit suitLeft = Suit.DIAMONDS;
 		Suit suitRight = Suit.CLUBS;
 		
@@ -71,11 +61,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoStraighFlushesSameStraight() {
+	public void compareTwoStraighFlushesSameStraight() {
 		Suit suitLeft = Suit.SPADES;
 		Suit suitRight = Suit.HEARTS;
 
@@ -96,11 +86,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoStraighFlushesDiffStraight() {
+	public void compareTwoStraighFlushesDiffStraight() {
 		Suit suitLeft = Suit.SPADES;
 		Suit suitRight = Suit.CLUBS;
 
@@ -121,11 +111,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoStraightFlushesWithLowAce() {
+	public void compareTwoStraightFlushesWithLowAce() {
 		Suit suitLeft = Suit.SPADES;
 		Suit suitRight = Suit.CLUBS;
 
@@ -146,11 +136,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoFourKinds() {
+	public void compareTwoFourKinds() {
 		
 		leftCards.add(new Card(Suit.CLUBS, Rank.NINE));
 		leftCards.add(new Card(Suit.HEARTS, Rank.NINE));
@@ -169,11 +159,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoFourKindsSameHighCard() {
+	public void compareTwoFourKindsSameHighCard() {
 		
 		leftCards.add(new Card(Suit.CLUBS, Rank.NINE));
 		leftCards.add(new Card(Suit.HEARTS, Rank.NINE));
@@ -192,11 +182,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoFullHousesDiffPair() {
+	public void compareTwoFullHousesDiffPair() {
 		leftCards.add(new Card(Suit.CLUBS, Rank.FOUR));
 		leftCards.add(new Card(Suit.HEARTS, Rank.FOUR));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.FOUR));
@@ -214,11 +204,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoFullHousesSamePair() {
+	public void compareTwoFullHousesSamePair() {
 		leftCards.add(new Card(Suit.CLUBS, Rank.NINE));
 		leftCards.add(new Card(Suit.HEARTS, Rank.NINE));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.NINE));
@@ -236,11 +226,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoFlushesSameRanks() {
+	public void compareTwoFlushesSameRanks() {
 		Suit leftSuit = Suit.DIAMONDS;
 		Suit rightSuit = Suit.HEARTS;
 		
@@ -261,11 +251,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoFlushesDiffRanks() {
+	public void compareTwoFlushesDiffRanks() {
 		Suit leftSuit = Suit.DIAMONDS;
 		Suit rightSuit = Suit.HEARTS;
 		
@@ -286,11 +276,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoFlushesAceHigh() {
+	public void compareTwoFlushesAceHigh() {
 		Suit leftSuit = Suit.DIAMONDS;
 		Suit rightSuit = Suit.HEARTS;
 		
@@ -311,11 +301,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoStraightsSame() {
+	public void compareTwoStraightsSame() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
 		leftCards.add(new Card(Suit.HEARTS, Rank.FIVE));
@@ -333,11 +323,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoStraightsDiff() {
+	public void compareTwoStraightsDiff() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
@@ -355,11 +345,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoStraightsWithLowAce() {
+	public void compareTwoStraightsWithLowAce() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SIX));
@@ -377,11 +367,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoThreeKinds() {
+	public void compareTwoThreeKinds() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.EIGHT));
 		leftCards.add(new Card(Suit.SPADES, Rank.EIGHT));
 		leftCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
@@ -399,11 +389,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoThreeKindsSameHighCards() {
+	public void compareTwoThreeKindsSameHighCards() {
 		leftCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SEVEN));
@@ -421,11 +411,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoDoublePairs() {
+	public void compareTwoDoublePairs() {
 		leftCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.FIVE));
@@ -443,11 +433,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoDoublePairsSame() {
+	public void compareTwoDoublePairsSame() {
 		leftCards.add(new Card(Suit.CLUBS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
@@ -465,11 +455,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoPairs() {
+	public void compareTwoPairs() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.KING));
 		leftCards.add(new Card(Suit.SPADES, Rank.KING));
 		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
@@ -487,11 +477,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void compareTwoPairsSame() {
+	public void compareTwoPairsSame() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.KING));
 		leftCards.add(new Card(Suit.SPADES, Rank.KING));
 		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
@@ -509,11 +499,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoHighCards() {
+	public void compareTwoHighCards() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.THREE));
 		leftCards.add(new Card(Suit.SPADES, Rank.TEN));
 		leftCards.add(new Card(Suit.CLUBS, Rank.EIGHT));
@@ -531,11 +521,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void compareTwoHighCardsSame() {
+	public void compareTwoHighCardsSame() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
 		leftCards.add(new Card(Suit.SPADES, Rank.TEN));
 		leftCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
@@ -553,11 +543,11 @@ class SameHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void zeroForSameHand() {
+	public void zeroForSameHand() {
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.JACK));
 		leftCards.add(new Card(Suit.SPADES, Rank.TEN));
 		leftCards.add(new Card(Suit.HEARTS, Rank.EIGHT));
@@ -573,8 +563,11 @@ class SameHandTests {
 		left.setCards(leftCards);
 		right.setCards(rightCards);
 
-		int result = comp.compare(left, right);
-		System.out.println("result1 in test: " + result);
-		assertEquals(0, result);
+		try {
+			comp.compare(left, right);
+			//Assert.fail();
+		} catch (IllegalArgumentException ex) {
+			//ok :)	
+		}
 	}
 }

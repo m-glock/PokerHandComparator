@@ -1,24 +1,17 @@
 package Tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
-import PokerHandComparator.Card;
-import PokerHandComparator.Hand;
-import PokerHandComparator.HandComparator;
-import PokerHandComparator.Rank;
-import PokerHandComparator.Suit;
+import PokerHandComparator.*;
 
-@TestInstance(Lifecycle.PER_CLASS)
-class DifferentHandTests {
+public class DifferentHandTests {
 
 	private Hand left;
 	private Hand right;
@@ -26,8 +19,7 @@ class DifferentHandTests {
 	private Set<Card> rightCards;
 	private HandComparator comp;
 	
-	@BeforeAll
-    public void init() {
+    public DifferentHandTests() {
 		left = new Hand();
 		right = new Hand();
 		
@@ -37,7 +29,7 @@ class DifferentHandTests {
 		comp = new HandComparator();
     }
 	
-	@AfterEach
+	@After
 	public void prepare() {
 		left.setCards(null);
 		right.setCards(null);
@@ -50,7 +42,7 @@ class DifferentHandTests {
 	 * compare different hand types
 	 * */
 	@Test
-	void onePairVsTwoPairs() {
+	public void onePairVsTwoPairs() {
 		// two pairs
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.FIVE));
 		leftCards.add(new Card(Suit.SPADES, Rank.FIVE));
@@ -74,7 +66,7 @@ class DifferentHandTests {
 	}
 	
 	@Test
-	void royalFlushVsStraighFlush() {
+	public void royalFlushVsStraighFlush() {
 		Suit leftSuit = Suit.DIAMONDS;
 		Suit rightSuit = Suit.CLUBS;
 		
@@ -101,7 +93,7 @@ class DifferentHandTests {
 	}
 	
 	@Test
-	void StraightVsFlush() {
+	public void StraightVsFlush() {
 		Suit suit = Suit.HEARTS;
 		
 		// flush
@@ -127,7 +119,7 @@ class DifferentHandTests {
 	}
 	
 	@Test
-	void StraightFlushVsStraight() {
+	public void StraightFlushVsStraight() {
 		Suit suit = Suit.SPADES;
 		
 		//straight flush
@@ -149,11 +141,11 @@ class DifferentHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 	
 	@Test
-	void straightFlushVsFlush() {
+	public void straightFlushVsFlush() {
 		Suit leftSuit = Suit.HEARTS;
 		Suit rightSuit = Suit.SPADES;
 		
@@ -176,11 +168,11 @@ class DifferentHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void threeOfAKindVsFullHouse() {
+	public void threeOfAKindVsFullHouse() {
 		//three of a kind
 		leftCards.add(new Card(Suit.CLUBS, Rank.ACE));
 		leftCards.add(new Card(Suit.DIAMONDS, Rank.ACE));
@@ -200,11 +192,11 @@ class DifferentHandTests {
 		
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(-1, result);
+		Assert.assertTrue(result < 0);
 	}
 	
 	@Test
-	void pairVsFullHouse() {
+	public void pairVsFullHouse() {
 		//full house
 		leftCards.add(new Card(Suit.HEARTS, Rank.SEVEN));
 		leftCards.add(new Card(Suit.SPADES, Rank.SEVEN));
@@ -224,6 +216,6 @@ class DifferentHandTests {
 				
 		int result = comp.compare(left, right);
 		System.out.println("result1 in test: " + result);
-		assertEquals(1, result);
+		Assert.assertTrue(result > 0);
 	}
 }
